@@ -13,7 +13,7 @@ import java.util.zip.ZipInputStream;
 
 public class FileDownloader {
 
-     FileDownloader() throws IOException {
+     public void downloadFile() throws IOException {
          String fileUrl = "https://www.smartform.cz/download/kopidlno.xml.zip";
          String localFileName = "kopidlno.xml.zip";
 

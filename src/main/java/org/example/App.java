@@ -11,9 +11,14 @@ public class App {
 
     public static void main(String[] args) throws IOException, SQLException, SAXException, ParserConfigurationException, XPathExpressionException {
 
-        new FileDownloader();
-        //new ParseObecKodNazev();
-        new ParseCastObceKodNazev();
+        FileDownloader fileDownloader = new FileDownloader();
+        fileDownloader.downloadFile();
+
+        ObecParser obecParser = new ObecParser();
+        obecParser.extractDataObec();
+
+        CastObceParser castObceParser = new CastObceParser();
+        castObceParser.extractDataCastbce();
     }
 }
 

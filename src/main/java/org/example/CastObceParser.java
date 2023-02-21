@@ -16,9 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class ParseCastObceKodNazev {
+public class CastObceParser {
 
-    ParseCastObceKodNazev() throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, SQLException {
+    public void extractDataCastbce () throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, SQLException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -27,30 +27,31 @@ public class ParseCastObceKodNazev {
         // Vytvoreni objektu XPath a XPathExpression pro vyhledávání knih
         XPathFactory xpathFactory = XPathFactory.newInstance();
         XPath xpath = xpathFactory.newXPath();
-        XPathExpression expressionCastObceObecKod = xpath.compile("//CastObce/Obec/Kod");
-        XPathExpression expressionCastObceKod = xpath.compile("//CastObce/Kod");
-        XPathExpression expressionCastObceNazev = xpath.compile("//CastObce/Nazev");
+
+        XPathExpression obecKod = xpath.compile("//CastObce/Obec/Kod");
+        XPathExpression castObceKod = xpath.compile("//CastObce/Kod");
+        XPathExpression castObceNazev = xpath.compile("//CastObce/Nazev");
 
         // Provedeni dotazu XPath a získani seznamu prvků
-        NodeList nodeListCastObceKod = (NodeList) expressionCastObceKod.evaluate(document, XPathConstants.NODESET);
-        NodeList nodeListCastObceNazev = (NodeList) expressionCastObceNazev.evaluate(document, XPathConstants.NODESET);
-        NodeList nodeListObecKod = (NodeList) expressionCastObceObecKod.evaluate(document, XPathConstants.NODESET);
+        NodeList nodeCastObceKod = (NodeList) castObceKod.evaluate(document, XPathConstants.NODESET);
+        NodeList nodeCastObceNazev = (NodeList) castObceNazev.evaluate(document, XPathConstants.NODESET);
+        NodeList nodeObecKod = (NodeList) obecKod.evaluate(document, XPathConstants.NODESET);
 
-        ArrayList<Integer> arrayCastObceObecKod = new ArrayList<>();
-        for (int i = 0; i < nodeListCastObceKod.getLength(); i++) {
-            Node node = nodeListCastObceKod.item(i);
+        ArrayList<Integer> arrayCastObceKod = new ArrayList<>();
+        for (int i = 0; i < nodeCastObceKod.getLength(); i++) {
+            Node node = nodeCastObceKod.item(i);
             int value = Integer.parseInt(node.getTextContent());
-            if (!arrayCastObceObecKod.contains(value)) {
-                arrayCastObceObecKod.add(value);
+            if (!arrayCastObceKod.contains(value)) {
+                arrayCastObceKod.add(value);
             }
         }
-        for (Integer num : arrayCastObceObecKod) {
+        for (Integer num : arrayCastObceKod) {
             System.out.println(num);
         }
 
         ArrayList<Integer> arrayObecKod = new ArrayList<>();
-        for (int i = 0; i < nodeListObecKod.getLength(); i++) {
-            Node node = nodeListObecKod.item(i);
+        for (int i = 0; i < nodeObecKod.getLength(); i++) {
+            Node node = nodeObecKod.item(i);
             int value = Integer.parseInt(node.getTextContent());
             if (!arrayObecKod.contains(value)) {
                 arrayObecKod.add(value);
@@ -60,25 +61,25 @@ public class ParseCastObceKodNazev {
             System.out.println(num);
         }
 
-        ArrayList<String> arrayObecNazev = new ArrayList<>();
-        for (int i = 0; i < nodeListCastObceNazev.getLength(); i++) {
-            Node node = nodeListCastObceNazev.item(i);
+        ArrayList<String> arrayCastObceNazev = new ArrayList<>();
+        for (int i = 0; i < nodeCastObceNazev.getLength(); i++) {
+            Node node = nodeCastObceNazev.item(i);
             String value = node.getTextContent();
-            if (!arrayObecNazev.contains(value)) {
-                arrayObecNazev.add(value);
+            if (!arrayCastObceNazev.contains(value)) {
+                arrayCastObceNazev.add(value);
             }
         }
-        for (String num : arrayObecNazev) {
+        for (String num : arrayCastObceNazev) {
             System.out.println(num);
         }
 
         ConnectionSQL connection = new ConnectionSQL();
         Connection con = connection.getConnection();
 
-        for (int i = 0; i < arrayCastObceObecKod.size(); i++) {
+        for (int i = 0; i < arrayCastObceKod.size(); i++) {
             int KodObceKeKteremu = arrayObecKod.get(0);
-            int kod = arrayCastObceObecKod.get(i);
-            String nazev = arrayObecNazev.get(i);
+            int kod = arrayCastObceKod.get(i);
+            String nazev = arrayCastObceNazev.get(i);
             String command = "INSERT INTO castobce (kod, nazev, KodObceKeKteremu) VALUES ('" + kod + "', '" + nazev + "', '" + KodObceKeKteremu + "');";
             System.out.println(command);
             Statement stmt = con.createStatement();
