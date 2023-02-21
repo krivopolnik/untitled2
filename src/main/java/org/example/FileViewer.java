@@ -7,20 +7,20 @@ public class FileViewer {
 
     public FileViewer() {
         try {
-            // Открываем файл для чтения
+            // Otevření souboru pro čtení
             FileReader fileReader = new FileReader("20210331_OB_573060_UZSZ.xml");
 
-            // Создаем BufferedReader для более удобного чтения файла
+            // Vytvořte BufferedReader pro snadnější čtení souboru
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
 
-            // Читаем файл построчно и выводим содержимое на экран
+            // Přečtěte si soubor řádek po řádku a zobrazte obsah na obrazovce
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
             }
 
-            // Закрываем BufferedReader и FileReader
+            // Zavřete BufferedReader a FileReader
             bufferedReader.close();
             fileReader.close();
         } catch (Exception e) {

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionSQL {
 
-    private Connection con;
+    private final Connection con;
 
     public ConnectionSQL() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/kopidlnodb";

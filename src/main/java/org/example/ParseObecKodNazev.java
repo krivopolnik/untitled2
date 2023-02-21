@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ParseObecKodNazev {
@@ -24,17 +25,17 @@ public class ParseObecKodNazev {
 
         Document document = builder.parse(new File("20210331_OB_573060_UZSZ.xml"));
 
-        // Создание объектов XPath и XPathExpression для поиска книг
+        // Vytvoreni objektu XPath a XPathExpression pro vyhledávání knih
         XPathFactory xpathFactory = XPathFactory.newInstance();
         XPath xpath = xpathFactory.newXPath();
         XPathExpression expressionObecKod = xpath.compile("//Obec/Kod");
         XPathExpression expressionObecNazev = xpath.compile("//Obec/Nazev");
 
-        // Выполнение запроса XPath и получение списка элементов
+        // Provedeni dotazu XPath a získani seznamu prvků
         NodeList nodeListKod = (NodeList) expressionObecKod.evaluate(document, XPathConstants.NODESET);
         NodeList nodeListNazev = (NodeList) expressionObecNazev.evaluate(document, XPathConstants.NODESET);
 
-        // Добавление в массив с проверкой если такого значения нет
+        // Přidání do pole, kontrola, zda taková hodnota neexistuje
         ArrayList<Integer> arrayObecKod = new ArrayList<>();
         for (int i = 0; i < nodeListKod.getLength(); i++) {
             Node node = nodeListKod.item(i);
@@ -62,16 +63,16 @@ public class ParseObecKodNazev {
         ConnectionSQL connection = new ConnectionSQL();
         Connection con = connection.getConnection();
 
-//        // Добавление в базу из массивов
-//        for (int i = 0; i < arrayObecKod.size(); i++) {
-//            int kod = arrayObecKod.get(i);
-//            String nazev = arrayObecNazev.get(i);
-//            String command = "INSERT INTO obec (kod, nazev) VALUES ('" + kod + "', '" + nazev + "');";
-//            System.out.println(command);
-//            Statement stmt = con.createStatement();
-//            stmt.executeUpdate(command);
-//            stmt.close();
-//        }
-//        con.close();
+        // Přidání do DB z array
+        for (int i = 0; i < arrayObecKod.size(); i++) {
+            int kod = arrayObecKod.get(i);
+            String nazev = arrayObecNazev.get(i);
+            String command = "INSERT INTO obec (kod, nazev) VALUES ('" + kod + "', '" + nazev + "');";
+            System.out.println(command);
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(command);
+            stmt.close();
+        }
+        con.close();
     }
 }
